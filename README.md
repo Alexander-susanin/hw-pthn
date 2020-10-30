@@ -1,2 +1,1 @@
-# hw-pthn
-there's hometask 
+# python
