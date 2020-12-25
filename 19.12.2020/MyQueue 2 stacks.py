@@ -21,7 +21,8 @@ class MyQueue:
 q = MyQueue()
 for i in range(10):
     q.push(i)
-for i in range(7):
+for i in range(5):
+    print(q.push(i))
     print(q.pop())
 print('The size of the first stack: ', q.size1())
 print('The size of the second stack: ', q.size2())
