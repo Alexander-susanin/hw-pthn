@@ -1,0 +1,103 @@
+import sys
+import sqlite3
+import argparse
+# import os, time
+db = sqlite3.connect('phonebookDB.sqlite')
+c = db.cursor()
+
+class Phonebook(object):
+    def __init__(self):
+        try:
+            c.execute('CREATE TABLE entries(id INTEGER PRIMARY KEY, name TEXT, phone TEXT unique)')
+        except:
+            pass
+        # print('Welcome to the Phonebook')
+
+    def addEntry():
+        name = input('Please, enter a name: ')
+        number = input('Please, enter a number: ')
+        c.execute('INSERT INTO entries(name, phone) VALUES(?,?)', (name, number))
+        db.commit()
+
+    def delEntry():
+        name = input('Please, enter a name to delete: ')
+        c.execute('DELETE FROM entries WHERE name=?', [name])
+        db.commit()
+
+    def query():
+        c.execute('SELECT name, phone FROM entries')
+        for items in c:
+            print(items)
+
+    # def rollback():
+    #     db.rollback()
+
+    # def save():
+    #     db.commit()
+
+    def exit():
+        sys.exit()#можно break
+
+# class MainMenu(Phonebook):
+#     def __init__(self):
+#         # time.sleep(2)
+#         # os.system ('cls')
+#         print('''
+# Main Menu
+# Please, select an option:
+#     1. "add" - to add an entry.
+#     2. "delete" - to delete an entry.
+#     3. "rollback" - to undo your last change.
+#     4. "query" - to query an entry.
+#     5. "save" - to save changes.
+#     6. "exit" - to exit the program.
+#             ''')
+
+#         selection = input()
+#         if selection == 'add':
+#             try:
+#                 Phonebook.addEntry()
+#             except:#IntegrityError
+#                 print('Phone Number already exists.')
+
+#         if selection == 'delete':
+#             Phonebook.delEntry()
+
+#         if selection == 'rollback':
+#             Phonebook.rollback()
+
+#         if selection == 'query':
+#             Phonebook.query()
+
+#         # if selection == 'save':
+#         #     Phonebook.save()
+
+#         if selection == 'exit':
+#             Phonebook.exit()
+
+Phonebook()
+# while True:
+#     MainMenu()
+
+parser = argparse.ArgumentParser(description='Phonebook')
+parser.add_argument('-q', '--query', action='store_true', help='show all existing contacts')
+parser.add_argument('-e', '--exit', action='store_true', help='just exit from program')
+parser.add_argument('-a', '--add', action='store_true', help='add a new contact')
+parser.add_argument('-d', '--delete', action='store_true', help='delete a contact')
+args = parser.parse_args()
+parser.print_help()
+print('-----------------------------------')
+
+if args.query:
+    Phonebook.query()
+   
+if args.exit:
+    Phonebook.exit()
+
+if args.add:
+    Phonebook.addEntry()
+
+if args.delete:
+    Phonebook.delEntry()
+
+db.close()
